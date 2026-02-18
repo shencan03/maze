@@ -1,18 +1,22 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 #define WINDOW_W 1920           // Defined as a placeholder. Both renderer and window adapts to SDL_WINDOW_FULLSCREEN_DESKTOP
 #define WINDOW_H 1080
 #define METAL_MULTIP 2
+#define RECT_W 24
+#define RECT_H 24
 
-int renderer_w_px, renderer_h_px;
-
-// Function to draw maze using SDL_Point* array
-void draw_maze(SDL_Renderer *renderer, const SDL_Point *points, int count);
+int renderer_px_w, renderer_px_h;
 
 int main(int argc, char *argv[])
 {
+    // Seed random
+    srand((unsigned) time(NULL));
+
+    // Init SDL lib
     SDL_Init(SDL_INIT_EVERYTHING);
     bool quit = false;
 
@@ -25,24 +29,9 @@ int main(int argc, char *argv[])
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     // Get renderer drawable pixel size
-    SDL_GetRendererOutputSize(renderer, &renderer_w_px, &renderer_h_px);
-    printf("renderer w in pixels: %d\nrenderer h in pixels: %d\n", renderer_w_px, renderer_h_px);
+    SDL_GetRendererOutputSize(renderer, &renderer_px_w, &renderer_px_h);
+    printf("renderer w in pixels: %d\nrenderer h in pixels: %d\n", renderer_px_w, renderer_px_h);
     
-    /*
-    SDL_Point points[5];
-    int xi, yi, i;
-    i = 0; xi = 0; yi = 0;
-    for(i = 0; i < 5;i++)
-    {
-        points[i] = (SDL_Point) {xi, yi};
-        xi++;
-        yi++;
-    }
-    */
-    SDL_Point points[2];
-    points[0] = (SDL_Point) {0, 0};
-    points[1] = (SDL_Point) {renderer_w_px, renderer_h_px};
-
     // main app loop
     SDL_Event loop_event;
     while(!quit)
@@ -56,19 +45,9 @@ int main(int argc, char *argv[])
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
 
-        // Draw lines
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-        // SDL_RenderDrawLine(renderer, 0, 0, 0, 1);
-        SDL_RenderDrawLines(renderer, points, 2);
         // Render everything
         SDL_RenderPresent(renderer);
     }
+
     return 0;
 }
-
-/*void draw_maze(SDL_Renderer *renderer, const SDL_Point *points, int count)
-{
-    
-}
-*/
-

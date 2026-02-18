@@ -1,0 +1,15 @@
+# Code maze generating algorithm
+
+1 - Define matrix consisting transparent SDL_Rects relative to background color and the given current display fullscreen resolution application is running.
+
+2 - Store SDL_Rects position on the matrix in an array.
+
+3 - Select starting SDL_Rect and destination SDL_Rect.
+
+4 - Given a to-be decided algorithm fill SDL_Rects to create multiple paths that reach the destination SDL_Rect
+
+5 - Implement A* to find the closest path.
+
+6 - Animate motion by coloring the curent SDL_Rect in a distinct color while having filled the previously reached paths in a different color from the rest of the SDL_Rects
+
+7 - TODO...
