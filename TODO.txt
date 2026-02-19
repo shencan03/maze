@@ -1,8 +1,12 @@
 # Code maze generating algorithm
 
-1 - Define matrix consisting transparent SDL_Rects relative to background color and the given current display fullscreen resolution application is running.
+1 - Define matrix where SDL_Rects to be drawn to resemble a maze:
+  ** Matrix properties:
+    1 - Auto scale SDL_Rect size depending on the current display.
+    2 - Define screen coordinate borders
+    3 - TODO...
 
-2 - Store SDL_Rects position on the matrix in an array.
+2 - Store SDL_Rects screen coordinates on the matrix in an array.
 
 3 - Select starting SDL_Rect and destination SDL_Rect.
 

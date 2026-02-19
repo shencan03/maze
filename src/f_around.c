@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
       fprintf(stderr, "Logical and physical dimensions missmatch.\nExiting...\n");
       exit(EXIT_FAILURE);
     }
-    
+
     // main app loop
     SDL_Event loop_event;
     while(!quit)
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
         }
 
         // BACKGROUND COLOR
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        SDL_SetRenderDrawColor(renderer, 123, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
 
         // Render everything
