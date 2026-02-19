@@ -1,6 +1,9 @@
+#include "SDL2/SDL_render.h"
+#include "SDL2/SDL_video.h"
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <time.h>
 
 #define WINDOW_W 1920           // Defined as a placeholder. Both renderer and window adapts to SDL_WINDOW_FULLSCREEN_DESKTOP
@@ -9,8 +12,6 @@
 #define RECT_W 24
 #define RECT_H 24
 
-int renderer_px_w, renderer_px_h;
-
 int main(int argc, char *argv[])
 {
     // Seed random
@@ -18,6 +19,7 @@ int main(int argc, char *argv[])
 
     // Init SDL lib
     SDL_Init(SDL_INIT_EVERYTHING);
+    // SDL_SetHint(SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES, "1");
     bool quit = false;
 
     // Declare window and renderer
@@ -25,21 +27,36 @@ int main(int argc, char *argv[])
     SDL_Renderer *renderer;
 
     // Initiate window and renderer
-    window = SDL_CreateWindow("LAAAAL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_W, WINDOW_H, SDL_WINDOW_METAL | SDL_WINDOW_FULLSCREEN_DESKTOP);
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    window = SDL_CreateWindow("LAAAAL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_W, WINDOW_H, SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_RESIZABLE );
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
 
-    // Get renderer drawable pixel size
-    SDL_GetRendererOutputSize(renderer, &renderer_px_w, &renderer_px_h);
-    printf("renderer w in pixels: %d\nrenderer h in pixels: %d\n", renderer_px_w, renderer_px_h);
+    // Get logical window size
+    int window_w, window_h;
+    SDL_GetWindowSize(window, &window_w, &window_h);
+    printf("SDL_GetWindowSize -> w: %d // h: %d\n", window_w, window_h);
+
+    // Get actual renderer dimensions
+    int renderer_w, renderer_h;
+    SDL_GetRendererOutputSize(renderer, &renderer_w, &renderer_h);
+    printf("SDL_GetRendererOutputSize -> w: %d // h: %d\n", renderer_w, renderer_h);
+
+    // check logical == physical dimensions
+    if(!(renderer_w == window_w && renderer_h == window_h))
+    {
+      fprintf(stderr, "Logical and physical dimensions missmatch.\nExiting...\n");
+      exit(EXIT_FAILURE);
+    }
     
     // main app loop
     SDL_Event loop_event;
     while(!quit)
     {
         // Handle exit
-        SDL_PollEvent(&loop_event);
-        if(loop_event.type == SDL_QUIT)
-            quit = true;
+        while(SDL_PollEvent(&loop_event))
+        {
+            if(loop_event.type == SDL_QUIT)
+                quit = true;
+        }
 
         // BACKGROUND COLOR
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
